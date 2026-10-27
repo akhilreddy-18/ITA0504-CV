@@ -1,0 +1,28 @@
+# Define new dimensions
+height, width = img.shape
+
+# Scale down (e.g., to 50% of the original size)
+smaller_dims = (int(width * 0.5), int(height * 0.5))
+img_smaller = cv2.resize(img, smaller_dims, interpolation=cv2.INTER_AREA)
+
+# Scale up (e.g., to 200% of the original size)
+larger_dims = (int(width * 2.0), int(height * 2.0))
+img_larger = cv2.resize(img, larger_dims, interpolation=cv2.INTER_CUBIC)
+
+# Display the original, smaller, and larger images
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+axes[0].imshow(img, cmap='gray')
+axes[0].set_title(f'Original Image\n({width}x{height})')
+axes[0].axis('off')
+
+axes[1].imshow(img_smaller, cmap='gray')
+axes[1].set_title(f'Downscaled Image (50%)\n({img_smaller.shape[1]}x{img_smaller.shape[0]})')
+axes[1].axis('off')
+
+axes[2].imshow(img_larger, cmap='gray')
+axes[2].set_title(f'Upscaled Image (200%)\n({img_larger.shape[1]}x{img_larger.shape[0]})')
+axes[2].axis('off')
+
+plt.tight_layout()
+plt.show()

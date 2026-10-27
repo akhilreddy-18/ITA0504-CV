@@ -1,0 +1,33 @@
+from google.colab import files
+import os
+
+# 1. Prompt the user to upload an image file
+print("Please upload your image file (e.g., .jpg, .png, .jpeg):")
+uploaded = files.upload()
+
+if uploaded:
+    # Get the name of the uploaded file
+    uploaded_file_name = list(uploaded.keys())[0]
+    print(f"\nSuccessfully uploaded: {uploaded_file_name}")
+    
+    # 2. Read the uploaded image
+    user_image = cv2.imread(uploaded_file_name)
+    user_image_rgb = cv2.cvtColor(user_image, cv2.COLOR_BGR2RGB)
+    
+    # 3. Apply dilation (using the previously defined 5x5 kernel)
+    user_dilated = cv2.dilate(user_image_rgb, kernel, iterations=1)
+    
+    # 4. Display the results
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    axes[0].imshow(user_image_rgb)
+    axes[0].set_title('Your Original Image')
+    axes[0].axis('off')
+    
+    axes[1].imshow(user_dilated)
+    axes[1].set_title('Your Dilated Image')
+    axes[1].axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+else:
+    print("No file was uploaded.")

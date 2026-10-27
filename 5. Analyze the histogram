@@ -1,0 +1,28 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def analyze_color_histogram(image_path):
+    # Load the image
+    img = cv2.imread(image_path)
+    if img is None:
+        print("Error: Could not read the image.")
+        return
+    
+    # OpenCV loads images in BGR format, we define the channel colors accordingly
+    colors = ('b', 'g', 'r')
+    
+    plt.figure(figsize=(10, 5))
+    plt.title('Color Histogram')
+    plt.xlabel('Bins (Color Intensity Levels)')
+    plt.ylabel('Number of Pixels')
+    
+    # Calculate and plot the histogram for each color channel
+    for i, color in enumerate(colors):
+        histogram = cv2.calcHist([img], [i], None, [256], [0, 256])
+        plt.plot(histogram, color=color, label=f'{color.upper()} Channel')
+        plt.xlim([0, 256])
+        
+    plt.legend()
+    plt.grid(True)
+    plt.show()

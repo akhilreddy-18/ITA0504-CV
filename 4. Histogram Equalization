@@ -1,0 +1,37 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Create a synthetic low-contrast image if you don't have one loaded
+# Replace this with your image loading code: img = cv2.imread('path_to_image.jpg', cv2.IMREAD_GRAYSCALE)
+np.random.seed(0)
+img = np.clip(np.random.normal(128, 20, (300, 300)), 0, 255).astype(np.uint8)
+
+# Apply Histogram Equalization
+equalized_img = cv2.equalizeHist(img)
+
+# Plot and compare the results
+plt.figure(figsize=(10, 5))
+
+# Original Image and its Histogram
+plt.subplot(2, 2, 1)
+plt.imshow(img, cmap='gray', vmin=0, vmax=255)
+plt.title('Original Image')
+plt.axis('off')
+
+plt.subplot(2, 2, 2)
+plt.hist(img.ravel(), 256, [0, 256])
+plt.title('Original Histogram')
+
+# Equalized Image and its Histogram
+plt.subplot(2, 2, 3)
+plt.imshow(equalized_img, cmap='gray', vmin=0, vmax=255)
+plt.title('Equalized Image')
+plt.axis('off')
+
+plt.subplot(2, 2, 4)
+plt.hist(equalized_img.ravel(), 256, [0, 256])
+plt.title('Equalized Histogram')
+
+plt.tight_layout()
+plt.show()

@@ -1,0 +1,28 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. Read the image
+img = cv2.imread('sample_test_image.png')
+
+# 2. Define a kernel for morphological operations
+# A 5x5 rectangular structuring element
+kernel = np.ones((5,5), dtype=np.uint8)
+
+# 3. Apply erosion
+eroded_img = cv2.erode(img, kernel, iterations=1)
+
+# 4. Display the original and eroded images
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+# Convert BGR to RGB for correct display in matplotlib
+axes[0].imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+axes[0].set_title('Original Image')
+axes[0].axis('off')
+
+axes[1].imshow(cv2.cvtColor(eroded_img, cv2.COLOR_BGR2RGB))
+axes[1].set_title('Eroded Image (Erosion)')
+axes[1].axis('off')
+
+plt.tight_layout()
+plt.show()

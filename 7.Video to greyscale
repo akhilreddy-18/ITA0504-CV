@@ -1,0 +1,54 @@
+import cv2
+import time
+from IPython.display import display, clear_output
+from PIL import Image
+
+def play_video(video_file, speed_factor=1.0, max_frames=50):
+    """
+    Reads and displays a video.
+    speed_factor < 1.0: Slow motion (e.g., 0.5)
+    speed_factor = 1.0: Normal speed
+    speed_factor > 1.0: Fast motion (e.g., 2.0)
+    """
+    cap = cv2.VideoCapture(video_file)
+    if not cap.isOpened():
+        print("Error: Could not open video file.")
+        return
+
+    # Get original FPS of the video
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    if fps == 0 or fps is None:
+        fps = 24.0
+    
+    # Calculate target delay between frames (in seconds)
+    # Lower speed factor -> longer delay (slow motion)
+    # Higher speed factor -> shorter delay (fast motion)
+    frame_delay = (1.0 / fps) / speed_factor
+
+    print(f"Playing video at {speed_factor}x speed (fps={fps * speed_factor:.2f})...")
+    
+    frame_count = 0
+    try:
+        while cap.isOpened() and frame_count < max_frames:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            
+            # Convert BGR (OpenCV format) to RGB (PIL format)
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            img = Image.fromarray(frame_rgb)
+            
+            # Downscale frame for faster notebook rendering
+            img.thumbnail((320, 240))
+            
+            clear_output(wait=True)
+            display(img)
+            
+            time.sleep(frame_delay)
+            frame_count += 1
+    except KeyboardInterrupt:
+        print("Playback stopped by user.")
+    finally:
+        cap.release()
+        clear_output(wait=True)
+        print(f"Finished playing {frame_count} frames.")

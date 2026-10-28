@@ -1,0 +1,33 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from google.colab import files
+from PIL import Image
+import io
+
+print("Please upload your image:")
+uploaded = files.upload()
+
+for filename in uploaded.keys():
+    # Read the image
+    image_data = uploaded[filename]
+    image = Image.open(io.BytesIO(image_data))
+    img_array = np.array(image)
+    
+    # Rotating 180 degrees along the Y-axis is equivalent to a horizontal flip
+    # we can use cv2.flip with flipCode = 1 (horizontal flip)
+    flipped_img = cv2.flip(img_array, 1)
+    
+    # Display the results
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    
+    axes[0].imshow(img_array)
+    axes[0].set_title("Original Image")
+    axes[0].axis('off')
+    
+    axes[1].imshow(flipped_img)
+    axes[1].set_title("180° Y-Axis Rotated (Flipped Horizontally)")
+    axes[1].axis('off')
+    
+    plt.tight_layout()
+    plt.show()
